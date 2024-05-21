@@ -71,6 +71,26 @@ export const highlightCode = ({ grammars }) => {
   };
 };
 
+export const addLineBreakOpportunitiesInInlineCode = () => {
+  return tree => {
+    visit(tree, { type: `element`, tagName: `code` }, node => {
+      if (node.children.length !== 1) return;
+      const newChildren = node.children[0].value
+        .replace(/\.([a-zA-Z_])/g, '.\u200B$1')
+        .split('\u200B')
+        .reduce((acc, value, index, array) => {
+          acc.push({ type: 'text', value });
+          if (index < array.length - 1)
+            acc.push({ type: 'element', tagName: 'wbr' });
+          return acc;
+        }, []);
+      node.children = newChildren;
+    });
+
+    return tree;
+  };
+};
+
 // Link inline code block elements to the appropriate language reference
 export const linkInlineCode = ({ references }) => {
   return tree => {

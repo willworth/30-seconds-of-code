@@ -9,6 +9,7 @@ import {
   transformHeadings,
   highlightCode,
   transformAdmonitions,
+  addLineBreakOpportunitiesInInlineCode,
   linkInlineCode,
   transfomImagePaths,
   wrapTables,
@@ -74,6 +75,7 @@ export class MarkdownParser {
         .use(embedCodepensFromLinks, { className: 'codepen-wrapper' })
         .use(remarkRehype, { allowDangerousHtml: true })
         .use(linkInlineCode, { references })
+        .use(addLineBreakOpportunitiesInInlineCode)
         .use(safeguardExternalLinks)
         .use(transformAdmonitions)
         .use(transformHeadings, { minLevel: 2, maxLevel: 4 })
